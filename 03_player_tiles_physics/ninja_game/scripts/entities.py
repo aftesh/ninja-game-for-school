@@ -12,7 +12,7 @@ class PhysicsEntity:
     def rect(self):
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
         
-    def update(self, tilemap, movement=(0, 0), movement_multiplyer=1):
+    def update(self, tilemap, movement=(0, 0), movement_multiplyer=1, gravitation_flip=False):
         self.collisions = {'up': False, 'down': False, 'right': False, 'left': False}
         
         frame_movement = (movement[0] * movement_multiplyer + self.velocity[0], movement[1] * movement_multiplyer + self.velocity[1])
@@ -40,8 +40,10 @@ class PhysicsEntity:
                     entity_rect.top = rect.bottom
                     self.collisions['up'] = True
                 self.pos[1] = entity_rect.y
-        
-        self.velocity[1] = min(5, self.velocity[1] + 0.1)
+        if gravitation_flip:
+            self.velocity[1] = max(-5, self.velocity[1] - 0.1)
+        else:
+            self.velocity[1] = min(5, self.velocity[1] + 0.1)
         
         if self.collisions['down'] or self.collisions['up']:
             self.velocity[1] = 0

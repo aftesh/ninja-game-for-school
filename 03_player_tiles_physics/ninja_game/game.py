@@ -18,7 +18,7 @@ class Game:
         
         self.movement = [False, False]
         self.movement_multiplier = 1
-
+        self.gravitation_flip = False
 
         self.assets = {
             'decor': load_images('tiles/decor'),
@@ -38,7 +38,7 @@ class Game:
             
             self.tilemap.render(self.display)
             
-            self.player.update(self.tilemap, (self.movement[1] - self.movement[0], 0), self.movement_multiplier)
+            self.player.update(self.tilemap, (self.movement[1] - self.movement[0], 0), self.movement_multiplier, self.gravitation_flip)
             self.player.render(self.display)
             
             for event in pygame.event.get():
@@ -54,6 +54,8 @@ class Game:
                         self.player.velocity[1] = -3
                     if event.key == pygame.K_LSHIFT:
                         self.movement_multiplier = 2
+                    if event.key == pygame.K_w:
+                        self.gravitation_flip = not self.gravitation_flip
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_a:
                         self.movement[0] = False
